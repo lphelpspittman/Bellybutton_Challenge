@@ -69,6 +69,7 @@ function buildCharts(sample) {
         let traceBubble = {
             x: otu_ids,
             y: sample_values,
+            text: otu_labels,
             mode: 'markers',
             marker: {
                 size: sample_values,
@@ -83,7 +84,8 @@ function buildCharts(sample) {
             title: "Bacteria in Sample",
             showlegend: false,
             xaxis: {title: "OTU ID"},
-            yaxix: {title: "Sample Values"}
+            yaxix: {title: "Sample Values"},
+            hovermode: "closest",
             
         }
 
@@ -149,6 +151,9 @@ function buildMetadata(sample) {
         for (key in metadataResult) {
             metadataPanel.append("h5").text(`${key.toUpperCase()}: ${metadataResult[key]}`);
         };
+
+        // call buildGauge function and pass
+        buildGauge(metadataResult.wfreq);
     
     // Note Data is not available below this point
     });
@@ -163,7 +168,7 @@ function optionChanged(newSample) {
     buildCharts(newSample);
 
     // update the metadataPanel
-    buildmetadata(newSample);
+    buildMetadata(newSample);
 }
 
 // 7. Deploy your app to a free static page hosting service, such as GitHub Pages. 
