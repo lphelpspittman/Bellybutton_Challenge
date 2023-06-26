@@ -7,11 +7,6 @@ console.log("Test for connection -- good")
 // v1.1/14-Interactive-Web-Visualizations/02-Homework/samples.json.
 // const roadster = "https://api.spacexdata.com/v3/roadster";
 
-// // Fetch the JSON data and console log it
-// d3.json(roadster).then(function(data) {
-//   console.log(data);
-// });
-
 // create a variable to store samples.json endpoint stored on Amazon server s3
 const sample_data = "https://2u-data-curriculum-team.s3.amazonaws.com/dataviz-classroom/v1.1/14-Interactive-Web-Visualizations/02-Homework/samples.json"
 
@@ -23,7 +18,7 @@ d3.json(sample_data).then(function(data) {
 // Note Data is not available below this point
 });
 
-// Build funciton calld buildChart
+// Build function calld buildChart
 // 2. Create a horizontal bar chart with a dropdown menu to display the top 10 OTUs found in that individual.
 // Use sample_values as the values for the bar chart.
 // Use otu_ids as the labels for the bar chart.
@@ -120,6 +115,45 @@ function buildCharts(sample) {
 
 // 5. Display each key-value pair from the metadata JSON object somewhere on the page.
 
+function buildMetadata(sample) {
+    d3.json(sample_data).then(function(data) {
+        console.log("This is sample data")
+        console.log(data);
+
+        let metadata = data.metadata;
+        // view in console
+        console.log("This is metadata");
+        console.log(metadata);
+
+        // filter samples for the give sample (i.e. 940)
+        let metadataArray = metadata.filter(metadataObject => metadataObject.id == sample);
+        // view metadataArray
+        console.log(metadataArray);
+
+        // unpack the object using indexing
+        let metadataResult = metadataArray[0];
+        // view in console
+        console.log("This is metadataResults");
+        console.log(metadataResult)
+
+        // use d3.select() to get  <div id="sample-metadata" class="panel-body"></div> from index.html
+        // when using id to select "#sample-metadata"
+        // assign to a variable
+        let metadataPanel = d3.select("#sample-metadata");
+
+        // need to wipe clean the metadataPanel
+        // using html("")
+        metadataPanel.html("");
+
+        // iterate over each key value pair in metadataResult and append to the metadataPanel
+        for (key in metadataResult) {
+            metadataPanel.append("h5").text(`${key.toUpperCase()}: ${metadataResult[key]}`);
+        };
+    
+    // Note Data is not available below this point
+    });
+}
+
 // 6. Update all the plots when a new sample is selected. Additionally, 
 // you are welcome to create any layout that you would like for your dashboard. 
 
@@ -129,10 +163,39 @@ function buildCharts(sample) {
 
 // create an initialized function called initialize
 function initialize() {
+    d3.json(sample_data).then(function(data) {
+        // console.log("This is sample data")
+        // console.log(data);
+    
+        let sampleNames = data.names;
+        // view in console
+        console.log(sampleNames);
+
+        // populate our pull down menu
+        // ref MDN for the select statement
+        // add option, value and text for each sampleName
+        // use d3.select to get <select id="selDataset" onchange="optionChanged(this.value)"></select>
+        let pulldownSelect = d3.select("#selDataset");
+
+        // iterate over each name in sampleName add option, value and text for each sampleName
+        for (let index = 0; index < sampleNames.length; index++) {
+            // start with pulldownSelect and chain
+            pulldownSelect
+            .append("option")
+            .text(sampleNames[index])
+            .property("value", sampleNames[index])
+        };
+
 
 
     // call buildCharts function
     buildCharts(940);
+
+    // call buildMetadata(sample)
+    buildMetadata(940);
+
+     // Note Data is not available below this point
+    });
 };
 
 initialize();
