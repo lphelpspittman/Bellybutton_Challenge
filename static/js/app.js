@@ -153,9 +153,18 @@ function buildMetadata(sample) {
     // Note Data is not available below this point
     });
 }
-
+// create event listener function 
+// the function has a name
+// <select id="selDataset" onchange="optionChanged(this.value)"></select>
 // 6. Update all the plots when a new sample is selected. Additionally, 
 // you are welcome to create any layout that you would like for your dashboard. 
+function optionChanged(newSample) {
+    // buildcharts
+    buildCharts(newSample);
+
+    // update the metadataPanel
+    buildmetadata(newSample);
+}
 
 // 7. Deploy your app to a free static page hosting service, such as GitHub Pages. 
 // Submit the links to your deployment and your GitHub repo. 
@@ -186,13 +195,14 @@ function initialize() {
             .property("value", sampleNames[index])
         };
 
+    let firstSample = sampleNames[0];
 
 
     // call buildCharts function
-    buildCharts(940);
+    buildCharts(firstSample);
 
     // call buildMetadata(sample)
-    buildMetadata(940);
+    buildMetadata(firstSample);
 
      // Note Data is not available below this point
     });
